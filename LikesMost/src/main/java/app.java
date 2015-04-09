@@ -7,10 +7,12 @@ import org.jinstagram.auth.model.Verifier;
 import org.jinstagram.auth.oauth.InstagramService;
 import org.jinstagram.entity.common.User;
 import org.jinstagram.entity.likes.LikesFeed;
-import org.jinstagram.entity.users.basicinfo.UserInfo;
 import org.jinstagram.entity.users.basicinfo.UserInfoData;
 import org.jinstagram.entity.users.feed.MediaFeed;
 import org.jinstagram.entity.users.feed.MediaFeedData;
+import org.jinstagram.exceptions.InstagramException;
+import spark.ModelAndView;
+import spark.template.freemarker.FreeMarkerEngine;
 
 import java.util.*;
 
@@ -107,9 +109,21 @@ public class app {
                 halt();
             }
 
-            UserInfoData userInfoData = instagram.getCurrentUserInfo().getData();
+            UserInfoData userInfoData = null;
+            if (instagram != null) {
+                try {
+                    userInfoData = instagram.getCurrentUserInfo().getData();
+                } catch (InstagramException e) {
+                    e.printStackTrace();
+                }
+            }
 
-            MediaFeed mediaFeed = instagram.getRecentMediaFeed(userInfoData.getId());
+            MediaFeed mediaFeed = null;
+            try {
+                mediaFeed = instagram.getRecentMediaFeed(userInfoData.getId());
+            } catch (InstagramException e) {
+                e.printStackTrace();
+            }
             List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
             LikesFeed likesFeed = null;
@@ -121,7 +135,11 @@ public class app {
             for (MediaFeedData mediaData : mediaFeeds) {
                 System.out.println("media id : " + mediaData.getId());
 
-                likesFeed = instagram.getUserLikes(mediaData.getId());
+                try {
+                    likesFeed = instagram.getUserLikes(mediaData.getId());
+                } catch (InstagramException e) {
+                    e.printStackTrace();
+                }
                 users = likesFeed.getUserList();
 
                 for(User user : users){
@@ -147,15 +165,21 @@ public class app {
                 }
             });
 
+            Map<String, Integer> listMap = new HashMap<String, Integer>();
+
             for (Object e : a) {
                 System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "
                 + ((Map.Entry<String, Integer>) e).getValue());
+
+                listMap.put(((Map.Entry<String, Integer>)e).getKey().toString(),
+                        ((Map.Entry<String, Integer>) e).getValue());
             }
 
+            //Set<Map.Entry<String, Integer>> entrySet = listMap.entrySet();
 
-            return "hello again";
+            return new ModelAndView(listMap, "likesmost.ftl");
 
-        });
+        }, new FreeMarkerEngine());
 
     }
 }

@@ -1,5 +1,5 @@
-import jlinsta.Constants;
-import jlinsta.InstagramUtils;
+package com.joshrincon.instautils;
+
 import org.jinstagram.auth.InstagramAuthService;
 import org.jinstagram.auth.oauth.InstagramService;
 

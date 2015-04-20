@@ -1,4 +1,4 @@
-package jlinsta;
+package com.joshrincon.instautils;
 
 public final class Constants {
 

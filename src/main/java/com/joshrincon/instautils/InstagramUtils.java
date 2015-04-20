@@ -1,4 +1,4 @@
-package jlinsta;
+package com.joshrincon.instautils;
 
 import java.io.IOException;
 import java.io.InputStream;

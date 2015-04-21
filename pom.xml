@@ -45,7 +45,6 @@
                             <includes>
                                 <include>*.xml</include>
                             </includes>
-
                         </resource>
                     </webResources>
                 </configuration>

@@ -28,28 +28,29 @@ public class LikesMostServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String code = request.getParameter("code");
-
-        InstagramService service = (InstagramService) request.getSession().getAttribute(Constants.INSTAGRAM_SERVICE);
-
-        System.out.println("Code is " + code);
-
-        Verifier verifier = new Verifier(code);
-
-        Token accessToken = service.getAccessToken(null, verifier);
-
-        Instagram objInstagram = new Instagram(accessToken);
-
-        request.getSession().setAttribute(Constants.INSTAGRAM_OBJECT, objInstagram);
-
         Instagram instagram = null;
+
+        Object objInstagram = request.getSession().getAttribute(Constants.INSTAGRAM_OBJECT);
 
         if(objInstagram != null) {
             instagram = (Instagram) objInstagram;
         } else {
-            System.out.println("objInstag is null");
-            request.getRequestDispatcher("/").forward(request, response);
-            return;
+            String code = request.getParameter("code");
+
+            InstagramService service = (InstagramService) request.getSession().getAttribute(Constants.INSTAGRAM_SERVICE);
+
+            System.out.println("Code is " + code);
+
+            Verifier verifier = new Verifier(code);
+
+            Token accessToken = service.getAccessToken(null, verifier);
+
+            instagram = new Instagram(accessToken);
+
+            request.getSession().setAttribute(Constants.INSTAGRAM_OBJECT, instagram);
+            /*System.out.println("objInstag is null");
+            request.getRequestDispatcher("/").forward(request, response);*/
+            /*return;*/
         }
 
         UserInfoData userInfoData = instagram.getCurrentUserInfo().getData();

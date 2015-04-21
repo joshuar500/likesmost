@@ -9,10 +9,18 @@
         <servlet-name>AuthServlet</servlet-name>
         <servlet-class>com.joshrincon.servlets.AuthServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LikesMostServlet</servlet-name>
+        <servlet-class>com.joshrincon.servlets.LikesMostServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AuthServlet</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LikesMostServlet</servlet-name>
+        <url-pattern>/likesmost/</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

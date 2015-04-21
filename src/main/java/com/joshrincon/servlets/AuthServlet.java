@@ -21,12 +21,13 @@ public class AuthServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // If we already have an instagram object, then redirect to profile.jsp
+        // If we already have an instagram object, then redirect to likesmost.jsp
         HttpSession session = request.getSession();
 
         Object objInstagram = session.getAttribute(Constants.INSTAGRAM_OBJECT);
         if (objInstagram != null) {
-            response.sendRedirect("/WEB-INF/profile.jsp");
+            response.sendRedirect("/likesmost/");
+            return;
         }
 
         Properties properties = InstagramUtils.getConfigProperties();
@@ -45,6 +46,6 @@ public class AuthServlet extends HttpServlet {
         System.out.println("Auth Url: " + authorizationUrl);
 
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-
+        return;
     }
 }

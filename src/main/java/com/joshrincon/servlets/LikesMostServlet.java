@@ -61,6 +61,21 @@ public class LikesMostServlet extends HttpServlet {
         LikesFeed likesFeed = null;
         List<User> users = null;
 
+
+        Map<String, String> colors = new HashMap<String, String>();
+        colors.put("#F7464A", "#FF5A5E");
+        colors.put("#46BFBD", "#5AD3D1");
+        colors.put("#FDB45C", "#FFC870");
+        colors.put("#949FB1", "#A8BC35");
+        colors.put("#4D5360", "#616774");
+        colors.put("#AA3939", "#FFAAAA");
+        colors.put("#226666", "#669999");
+        colors.put("#7B9F35", "#D4EE9F");
+        colors.put("#AA8439", "#FFE2AA");
+        colors.put("#403075", "#226765");
+
+
+
         Map<String, Integer> likerOccurances = new HashMap<String, Integer>();
 
         int i = 0;
@@ -92,12 +107,13 @@ public class LikesMostServlet extends HttpServlet {
             }
         });
 
-        for (Object e : a) {
+        /*for (Object e : a) {
             System.out.println(((Map.Entry<String, Integer>) e).getKey() + " : "
                     + ((Map.Entry<String, Integer>) e).getValue());
-        }
+        }*/
 
         request.setAttribute("orderedList", a);
+        request.setAttribute("colors", colors);
 
         request.getRequestDispatcher("/WEB-INF/likesmost.jsp").forward(request, response);
         return;

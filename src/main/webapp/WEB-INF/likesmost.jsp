@@ -5,32 +5,58 @@
 <head>
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="<c:url value="/static/chart.min.js/chart.min.js" />"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/static/chart.min.js/chart.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/static/crap.js"></script>
     <script type="text/javascript">
-        var ctx = document.getElementById("myChart").getContext("2d");
-        var myNewChart = new Chart(ctx[1]).Doughnut(data);
+        $(function() {
+            options = {
+                //Boolean - Show a backdrop to the scale label
+                scaleShowLabelBackdrop: true,
+                //String - The colour of the label backdrop
+                scaleBackdropColor: "rgba(255,255,255,0.75)",
+                // Boolean - Whether the scale should begin at zero
+                scaleBeginAtZero: true,
+                //Number - The backdrop padding above & below the label in pixels
+                scaleBackdropPaddingY: 2,
+                //Number - The backdrop padding to the side of the label in pixels
+                scaleBackdropPaddingX: 2,
+                //Boolean - Show line for each value in the scale
+                scaleShowLine: true,
+                //Boolean - Stroke a line around each segment in the chart
+                segmentShowStroke: true,
+                //String - The colour of the stroke on each segement.
+                segmentStrokeColor: "#fff",
+                //Number - The width of the stroke value in pixels
+                segmentStrokeWidth: 2,
+                //Number - Amount of animation steps
+                animationSteps: 100,
+                //String - Animation easing effect.
+                animationEasing: "easeOutBounce",
+                //Boolean - Whether to animate the rotation of the chart
+                animateRotate: true,
+                //Boolean - Whether to animate scaling the chart from the centre
+                animateScale: false
 
-        var data = [
-            {
-                value: 300,
-                color:"#F7464A",
-                highlight: "#FF5A5E",
-                label: "Red"
-            },
-            {
-                value: 50,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
-                label: "Green"
-            },
-            {
-                value: 100,
-                color: "#FDB45C",
-                highlight: "#FFC870",
-                label: "Yellow"
-            }
-        ]
+
+            };
+            data = [
+
+                <c:set var="counter" value="0" />
+                <c:forEach var="color" items="${colors}" varStatus="status">
+                    <c:if test="${counter le 10}">
+                    {
+                        value: ${orderedList[status.index].value},
+                        color:"${color.key}",
+                        highlight: "${color.value}",
+                        label: "${orderedList[status.index].key}"
+                    },
+                    <c:set var="counter" value="${counter + 1}" />
+                    </c:if>
+                </c:forEach>
+            ];
+            ctx = $("#myChart").get(0).getContext("2d");
+            myNewChart = new Chart(ctx).Pie(data, options);
+        });
 
     </script>
 </head>
@@ -38,9 +64,13 @@
 
 <canvas id="myChart" width="400" height="400"></canvas>
 
-<c:forEach var="entry" items="${orderedList}">
-    ${entry.key} : ${entry.value}<br />
-</c:forEach>
+<div style="clear:left;">
+    <c:forEach var="color" items="${colors}" varStatus="status">
+        <c:if test="${status.count le 10}">
+            <span style="color: ${color.key};">${orderedList[status.index].key}</span><br />
+        </c:if>
+    </c:forEach>
+</div>
 
 </body>
 </html>
